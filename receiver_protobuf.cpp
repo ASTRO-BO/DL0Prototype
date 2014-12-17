@@ -49,7 +49,7 @@ int main (int argc, char *argv [])
 			{
 				/// parsing CameraEvent
 				event.ParseFromString(buffers.Get(i));
-				const unsigned int telescopeID = event.telescopeid();
+/*				const unsigned int telescopeID = event.telescopeid();
 				const CTADataModel::PixelsChannel& higain = event.higain();
 				const CTADataModel::WaveFormData& waveforms = higain.waveforms();
 				int nsamples = waveforms.num_samples();
@@ -60,7 +60,7 @@ int main (int argc, char *argv [])
 				/// get npixels of the camera from telescopeID
 				CTAConfig::CTAMDTelescopeType* teltype = array_conf.getTelescope(telescopeID)->getTelescopeType();
 				int telTypeSim = teltype->getID();
-				const unsigned int npixels = teltype->getCameraType()->getNpixels();
+				const unsigned int npixels = teltype->getCameraType()->getNpixels();*/
 
 #ifdef DEBUG
 				std::cout << "telType: " << telTypeSim;

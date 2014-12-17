@@ -45,7 +45,7 @@ int main (int argc, char *argv [])
 		/// decoding packetlib packet
 		PacketLib::ByteStreamPtr stream = PacketLib::ByteStreamPtr(new PacketLib::ByteStream((PacketLib::byte*)message.data(), message.size(), false));
 		PacketLib::Packet *packet = ps.getPacket(stream);
-		PacketLib::DataFieldHeader* dfh = packet->getPacketDataFieldHeader();
+/*		PacketLib::DataFieldHeader* dfh = packet->getPacketDataFieldHeader();
 		PacketLib::SourceDataField* sdf = packet->getPacketSourceDataField();
 		const unsigned int telescopeID = sdf->getFieldValue_16ui("TelescopeID");
 		const unsigned int nsamples = sdf->getFieldValue_32ui("Number of samples");
@@ -55,7 +55,7 @@ int main (int argc, char *argv [])
 		/// get npixels of the camera from telescopeID
 		CTAConfig::CTAMDTelescopeType* teltype = array_conf.getTelescope(telescopeID)->getTelescopeType();
 		int telTypeSim = teltype->getID();
-		const unsigned int npixels = teltype->getCameraType()->getNpixels();
+		const unsigned int npixels = teltype->getCameraType()->getNpixels();*/
 
 #ifdef DEBUG
 		std::cout << "telType: " << telTypeSim;
