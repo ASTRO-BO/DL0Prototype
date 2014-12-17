@@ -80,7 +80,7 @@ int main (int argc, char *argv [])
 #endif
 			}
 		}
-		if(message_count == 1000) {
+		if(message_count == 10000) {
 			unsigned long elapsed = zmq_stopwatch_stop(watch);
 			unsigned long throughput = (unsigned long)
 			((double) message_count / (double) elapsed * 1000000);
