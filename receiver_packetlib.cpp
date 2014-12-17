@@ -20,8 +20,8 @@ int main (int argc, char *argv [])
 
 	// open a ZMQ_PULL connection with the DAQ
 	zmq::context_t context;
-	zmq::socket_t* sock = new zmq::socket_t(context, ZMQ_PULL);
-	sock->bind("tcp://*:5556");
+	zmq::socket_t sock(context, ZMQ_PULL);
+	sock.bind("tcp://*:5556");
 
 	zmq::message_t message;
 
@@ -37,7 +37,7 @@ int main (int argc, char *argv [])
 
 	while(true)
 	{
-		sock->recv(&message);
+		sock.recv(&message);
 
 		message_count++;
 		message_size += message.size();
