@@ -127,7 +127,6 @@ public:
 		PacketLib::ByteStreamPtr event = _events[_idx];
 
 		zmq::message_t msg(event->size());
-		std::cout << event->size() << std::endl;
 		memcpy(msg.data(), event->getStream(), event->size());
 		_streamer->sendRawMessage(msg);
 

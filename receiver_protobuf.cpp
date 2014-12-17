@@ -30,8 +30,9 @@ int main (int argc, char *argv [])
 		sock->recv(&message);
 
 		message_count++;
-		message_size = message.size();
+		message_size += message.size();
 
+		/// parsing CTAMessage
 		CTADataModel::CTAMessage ctaMsg;
 		if (!ctaMsg.ParseFromArray(message.data(), message.size()))
 		{
@@ -46,73 +47,52 @@ int main (int argc, char *argv [])
 		{
 			if(types.Get(i) == CTADataModel::CAMERA_EVENT)
 			{
+				/// parsing CameraEvent
 				event.ParseFromString(buffers.Get(i));
+				const unsigned int telescopeID = event.telescopeid();
+				const CTADataModel::PixelsChannel& higain = event.higain();
+				const CTADataModel::WaveFormData& waveforms = higain.waveforms();
+				int nsamples = waveforms.num_samples();
+				const CTADataModel::CTAArray& samples = waveforms.samples();
+				unsigned char *buff = (unsigned char*) samples.data().c_str();
+				unsigned int buffSize = samples.data().size();
 
-				CTAConfig::CTAMDTelescopeType* teltype = array_conf.getTelescope(event.telescopeid())->getTelescopeType();
-
-				// get TelType
+				/// get npixels of the camera from telescopeID
+				CTAConfig::CTAMDTelescopeType* teltype = array_conf.getTelescope(telescopeID)->getTelescopeType();
 				int telTypeSim = teltype->getID();
+				const unsigned int npixels = teltype->getCameraType()->getNpixels();
 
 #ifdef DEBUG
 				std::cout << "telType: " << telTypeSim;
 				switch(telTypeSim) {
 					case 138704810:
-					{
 						std::cout << " large" << std::endl;
 						break;
-					}
 					case 10408418:
-					{
 						std::cout << " medium" << std::endl;
 						break;
-					}
 					case 3709425:
-					{
 						std::cout << " small" << std::endl;
 						break;
-					}
-					default:
-					{
-						std::cerr << "Warning: bad telescope type, skipping." << std::endl;
-						continue;
-					}
 				}
-#endif
-
-				// get number of pixels
-				int npixels = teltype->getCameraType()->getNpixels();
-
-				// get samples and number of samples
-				const CTADataModel::PixelsChannel& higain = event.higain();
-				const CTADataModel::WaveFormData& waveforms = higain.waveforms();
-				//const CTADataModel::CTAArray& samples = waveforms.samples();
-				int nsamples = waveforms.num_samples();
-
-				//unsigned char *buff = (unsigned char*) samples.data().c_str();
-				//unsigned int buffSize = samples.data().size();
-#ifdef DEBUG
-				cout << "pixels: " << npixels << " samples: " << nsamples << endl;
+				std::cout << "pixels: " << npixels << std::endl;
+				std::cout << " samples: " << nsamples << std::endl;
 #endif
 			}
 		}
-
-		if(message_count == 100000) {
-
+		if(message_count == 1000) {
 			unsigned long elapsed = zmq_stopwatch_stop(watch);
-			if(elapsed == 0)
-			{
-				std::cout << "Huston, maybe some problem here with elapsed.." << std::endl;
-				elapsed = 1;
-			}
 			unsigned long throughput = (unsigned long)
 			((double) message_count / (double) elapsed * 1000000);
-			megabits = (double) (throughput * message_size * 8) / 1000000;
+			megabits = (double) (message_size * 8) / 1000000;
 			std::cout << "message size: " << message_size << " [B]" << std::endl;
 			std::cout << "message count: " << message_count <<  std::endl;
 			std::cout << "mean throughput: " << throughput << " [msg/s]" << std::endl;
 			std::cout << "mean throughput: " << megabits << " [Mb/s]" << std::endl;
-			watch = zmq_stopwatch_start();
+
 			message_count = 0;
+			message_size = 0;
+			watch = zmq_stopwatch_start();
 		}
 	}
 
