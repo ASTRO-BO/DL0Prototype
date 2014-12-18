@@ -1,7 +1,7 @@
 #include <L0.pb.h>
 #include <Streamer.hpp>
 #include <packet/PacketBufferV.h>
-
+#include <cstdlib>
 
 class ZMQStreamer
 {
@@ -148,15 +148,16 @@ private:
 
 int main(int argc, char* argv[])
 {
-	if(argc <= 3)
+	if(argc <= 4)
 	{
-		std::cout << "Wrong arguments, please provide config file, raw input file and if send as protobuf or packetlib." << std::endl;
-		std::cout << argv[0] << " config.xml input.raw protobuf|packetlib" << std::endl;
+		std::cout << "Wrong arguments, please provide config file, raw input file, number of packets and if send as protobuf or packetlib." << std::endl;
+		std::cout << argv[0] << " <configfile> <inputfile> <npackets> protobuf | packetlib" << std::endl;
 		return 1;
 	}
-	std::string config_filename = argv[1];
-	std::string input_filename = argv[2];
-	std::string type = argv[3];
+	const std::string config_filename = argv[1];
+	const std::string input_filename = argv[2];
+	const long nummessages = std::atol(argv[3]);
+	const std::string type = argv[4];
 
 	if(type.compare("protobuf") != 0 && type.compare("packetlib") != 0 )
 	{
@@ -167,13 +168,12 @@ int main(int argc, char* argv[])
 
 	const std::string sockAddress = "tcp://localhost:5556";
 
-	ZMQStreamer* streamer;
+	ZMQStreamer* streamer = nullptr;
 	if(type.compare("protobuf") == 0)
 		streamer = new ProtobufStreamer(config_filename, input_filename, sockAddress);
 	else if(type.compare("packetlib") == 0)
 		streamer = new PacketLibStreamer(config_filename, input_filename, sockAddress);
 
-	const unsigned long nummessages = 10;
 	streamer->sendNumMessages(nummessages);
 
 	unsigned int counter = 0;
