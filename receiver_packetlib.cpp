@@ -5,6 +5,8 @@
 #include <packet/Packet.h>
 #include <packet/PacketStream.h>
 #include <CTAMDArray.h>
+#include <chrono>
+#include <ctime>
 
 #undef DEBUG
 
@@ -38,7 +40,8 @@ int main (int argc, char *argv [])
 	unsigned long nummessages = *((long*)message.data());
 	std::cout << "Receiving " << nummessages << " messages.." << std::endl;
 
-	void* watch = zmq_stopwatch_start();
+	std::chrono::time_point<std::chrono::system_clock> start, end;
+	start = std::chrono::system_clock::now();
 	while(message_count < nummessages)
 	{
 		sock.recv(&message);
@@ -78,14 +81,13 @@ int main (int argc, char *argv [])
 		std::cout << " samples: " << nsamples << std::endl;
 #endif
 	}
-	unsigned long elapsed = zmq_stopwatch_stop(watch);
-	unsigned long throughput = (unsigned long)
-		((double) message_count / (double) elapsed * 1000000);
-	double megabits = (double) (message_size * 8) / 1000000;
-	std::cout << "elapsed: " << elapsed << " s" << std::endl;
-	std::cout << "message count: " << message_count <<  std::endl;
-	std::cout << "total messages size: " << message_size << " [B]" << std::endl;
-	std::cout << "mean throughput: " << throughput << " msg/s = " << megabits << " Mbit/s" << std::endl;
+	end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed = end-start;
+	double msgs = message_count / elapsed.count();
+	double mbits = ((message_size / 1000000) * 8) / elapsed.count();
+	std::cout << message_count << "messages sent in " << elapsed.count() << " s" << std::endl;
+	std::cout << "mean message size: " << message_size / message_count << std::endl;
+	std::cout << "throughput: " << msgs << " msg/s = " << mbits << " mbit/s" << std::endl;
 
 	return 0;
 }
