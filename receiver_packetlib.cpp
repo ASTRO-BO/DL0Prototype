@@ -23,8 +23,6 @@ int main (int argc, char *argv [])
 	zmq::socket_t sock(context, ZMQ_PULL);
 	sock.bind("tcp://*:5556");
 
-	zmq::message_t message;
-
 	CTAConfig::CTAMDArray array_conf;
 	std::cout << "Preloading.." << std::endl;
 	array_conf.loadConfig("AARPROD2", "PROD2_telconfig.fits.gz", "Aar.conf", "/home/zoli/local.rtaproto2/share/ctaconfig/");
@@ -32,10 +30,16 @@ int main (int argc, char *argv [])
 
 	unsigned long message_count = 0;
 	unsigned long message_size = 0;
-	double megabits = 0.;
-	void* watch = zmq_stopwatch_start();
 
-	while(true)
+	// wait for first message (for timer) and skip it
+	std::cout << "Waiting for streamer.." << std::endl;
+	zmq::message_t message;
+	sock.recv(&message);
+	unsigned long nummessages = *((long*)message.data());
+	std::cout << "Receiving " << nummessages << " messages.." << std::endl;
+
+	void* watch = zmq_stopwatch_start();
+	while(message_count < nummessages)
 	{
 		sock.recv(&message);
 
@@ -73,21 +77,15 @@ int main (int argc, char *argv [])
 		std::cout << "pixels: " << npixels << std::endl;
 		std::cout << " samples: " << nsamples << std::endl;
 #endif
-		if(message_count == 10000) {
-			unsigned long elapsed = zmq_stopwatch_stop(watch);
-			unsigned long throughput = (unsigned long)
-			((double) message_count / (double) elapsed * 1000000);
-			megabits = (double) (message_size * 8) / 1000000;
-			std::cout << "message size: " << message_size << " [B]" << std::endl;
-			std::cout << "message count: " << message_count <<  std::endl;
-			std::cout << "mean throughput: " << throughput << " [msg/s]" << std::endl;
-			std::cout << "mean throughput: " << megabits << " [Mb/s]" << std::endl;
-
-			message_count = 0;
-			message_size = 0;
-			watch = zmq_stopwatch_start();
-		}
 	}
+	unsigned long elapsed = zmq_stopwatch_stop(watch);
+	unsigned long throughput = (unsigned long)
+		((double) message_count / (double) elapsed * 1000000);
+	double megabits = (double) (message_size * 8) / 1000000;
+	std::cout << "elapsed: " << elapsed << " s" << std::endl;
+	std::cout << "message count: " << message_count <<  std::endl;
+	std::cout << "total messages size: " << message_size << " [B]" << std::endl;
+	std::cout << "mean throughput: " << throughput << " msg/s = " << megabits << " Mbit/s" << std::endl;
 
 	return 0;
 }

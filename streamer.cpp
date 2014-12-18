@@ -17,6 +17,13 @@ public:
 		_streamer->addConnection(ZMQ_PUSH, sockAddress);
 	}
 
+	virtual void sendNumMessages(unsigned long nummessages)
+	{
+		zmq::message_t msg(sizeof(nummessages));
+		memcpy(msg.data(), &nummessages, sizeof(nummessages));
+		_streamer->sendRawMessage(msg);
+	}
+
 	virtual ~ZMQStreamer()
 	{
 		delete _buff;
@@ -166,7 +173,11 @@ int main(int argc, char* argv[])
 	else if(type.compare("packetlib") == 0)
 		streamer = new PacketLibStreamer(config_filename, input_filename, sockAddress);
 
-	while(1)
+	const unsigned long nummessages = 10;
+	streamer->sendNumMessages(nummessages);
+
+	unsigned int counter = 0;
+	while(counter++ < nummessages)
 	{
 		streamer->sendNextMessage();
 	}
