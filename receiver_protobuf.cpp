@@ -62,8 +62,8 @@ int main (int argc, char *argv [])
 			if(types.Get(i) == CTADataModel::CAMERA_EVENT)
 			{
 				/// parsing CameraEvent
-				event.ParseFromString(buffers.Get(i));
-/*				const unsigned int telescopeID = event.telescopeid();
+/*				event.ParseFromString(buffers.Get(i));
+				const unsigned int telescopeID = event.telescopeid();
 				const CTADataModel::PixelsChannel& higain = event.higain();
 				const CTADataModel::WaveFormData& waveforms = higain.waveforms();
 				int nsamples = waveforms.num_samples();
