@@ -81,19 +81,22 @@ int main (int argc, char *argv [])
 			{
 				/// parsing CameraEvent
 				event.ParseFromString(buffers.Get(i));
+
+				/// get telescope id
 				const unsigned int telescopeID = event.telescopeid();
-/*				const CTADataModel::PixelsChannel& higain = event.higain();
+
+				/// get the waveforms
+				const CTADataModel::PixelsChannel& higain = event.higain();
 				const CTADataModel::WaveFormData& waveforms = higain.waveforms();
-				int nsamples = waveforms.num_samples();
 				const CTADataModel::CTAArray& samples = waveforms.samples();
 				unsigned char *buff = (unsigned char*) samples.data().c_str();
 				unsigned int buffSize = samples.data().size();
 
-				/// get npixels of the camera from telescopeID
+				/// get npixels and nsamples from ctaconfig using the telescopeID
 				CTAConfig::CTAMDTelescopeType* teltype = array_conf.getTelescope(telescopeID)->getTelescopeType();
 				int telTypeSim = teltype->getID();
-				const unsigned int npixels = teltype->getCameraType()->getNpixels();*/
-
+				const unsigned int npixels = teltype->getCameraType()->getNpixels();
+				const unsigned int nsamples = teltype->getCameraType()->getPixel(0)->getPixelType()->getNSamples();
 			}
 		}
 	}
