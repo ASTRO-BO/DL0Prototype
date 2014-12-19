@@ -72,7 +72,7 @@ int main (int argc, char *argv [])
 		PacketLib::Packet *packet = ps.getPacket(stream);
 /*		PacketLib::DataFieldHeader* dfh = packet->getPacketDataFieldHeader();
 		PacketLib::SourceDataField* sdf = packet->getPacketSourceDataField();
-		const unsigned int telescopeID = sdf->getFieldValue_16ui("TelescopeID");
+		const unsigned int telescopeID = dfh->getFieldValue_16ui("TelescopeID");
 		const unsigned int nsamples = sdf->getFieldValue_32ui("Number of samples");
 		PacketLib::byte* buff = packet->getData()->getStream();
 		PacketLib::dword buffSize = packet->getData()->size();

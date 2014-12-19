@@ -98,13 +98,13 @@ private:
 	{
 	    PacketLib::DataFieldHeader* dfh = packet->getPacketDataFieldHeader();
 	    PacketLib::SourceDataField* sdf = packet->getPacketSourceDataField();
-	    const unsigned int telescopeID = sdf->getFieldValue_16ui("TelescopeID");
+	    const unsigned int telescopeID = dfh->getFieldValue_16ui("TelescopeID");
 	    // FIXME dateMJD should be something like:
 	    // unsigned int LTtime = dfh->getFieldValue_64ui("LTtime");
 	    // handle the 64 bits
 	    const unsigned int dateMJD = 1;
 	    CTADataModel::EventType eventType = CTADataModel::PHYSICAL;
-	    const unsigned int eventNumber = sdf->getFieldValue_32ui("eventNumber");
+	    const unsigned int eventNumber = dfh->getFieldValue_32ui("eventNumber");
 	    const unsigned int arrayEvtNum = dfh->getFieldValue_32ui("ArrayID");
 	    PacketLib::byte* data = packet->getData()->getStream();
 		PacketLib::dword size = packet->getData()->size();
