@@ -82,22 +82,6 @@ int main (int argc, char *argv [])
 		int telTypeSim = teltype->getID();
 		const unsigned int npixels = teltype->getCameraType()->getNpixels();*/
 
-#ifdef DEBUG
-		std::cout << "telType: " << telTypeSim;
-		switch(telTypeSim) {
-			case 138704810:
-				std::cout << " large" << std::endl;
-				break;
-			case 10408418:
-				std::cout << " medium" << std::endl;
-				break;
-			case 3709425:
-				std::cout << " small" << std::endl;
-				break;
-		}
-		std::cout << "pixels: " << npixels << std::endl;
-		std::cout << " samples: " << nsamples << std::endl;
-#endif
 	}
 	end = std::chrono::system_clock::now();
 	std::chrono::duration<double> elapsed = end-start;
