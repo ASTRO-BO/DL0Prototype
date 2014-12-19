@@ -1,3 +1,21 @@
+/***************************************************************************
+ receiver_packetlib.cpp
+ -------------------
+ copyright            : (C) 2014 Andrea Zoli, Andrea Bulgarelli,
+                                 Valentina Fioretti
+ email                : zoli@iasfbo.inaf.it, bulgarelli@iasfbo.inaf.it,
+                        fioretti@iasfbo.inaf.it
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software for non commercial purpose              *
+ *   and for public research institutes; you can redistribute it and/or    *
+ *   modify it under the terms of the GNU General Public License.          *
+ *   For commercial purpose see appropriate license terms                  *
+ *                                                                         *
+ ***************************************************************************/
+
 #include <L0.pb.h>
 #include <Streamer.hpp>
 #include <packet/PacketBufferV.h>
