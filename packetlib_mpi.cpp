@@ -33,8 +33,8 @@ int main(int argc, char* argv[])
 		std::cout << argv[0] << " <configfile> <inputfile> <npackets>" << std::endl;
 		return 1;
 	}
-	const std::string configFilename = argv[1];
-	const std::string inputFilename = argv[2];
+	const std::string configFilename(realpath(argv[1], NULL));
+	const std::string inputFilename(realpath(argv[2], NULL));
 	const unsigned long numevents = std::atol(argv[3]);
 
 	// init MPI

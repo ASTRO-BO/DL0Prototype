@@ -172,8 +172,8 @@ int main(int argc, char* argv[])
 		std::cout << argv[0] << " <configfile> <inputfile> <npackets> protobuf | packetlib" << std::endl;
 		return 1;
 	}
-	const std::string config_filename = argv[1];
-	const std::string input_filename = argv[2];
+	const std::string configFilename(realpath(argv[1], NULL));
+	const std::string inputFilename(realpath(argv[2], NULL));
 	const long nummessages = std::atol(argv[3]);
 	const std::string type = argv[4];
 
