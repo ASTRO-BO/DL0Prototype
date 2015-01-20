@@ -1,0 +1,4 @@
+#!/bin/sh
+
+#/prod_iasfbo/openmpi/gnu/openmpi-1.6.5--static/bin/mpirun -H login01,login02 -npernode 1 /RossiFumi/users/zoli/DL0Prototype/protobuf_mpi /RossiFumi/users/zoli/DL0Prototype/conf/proto1.xml /RossiFumi/users/zoli/DL0Prototype/conf/proto1.raw 100000 > logprotobuf
+/prod_iasfbo/openmpi/gnu/openmpi-1.6.5--static/bin/mpirun -H login01,login02 -npernode 1 /RossiFumi/users/zoli/DL0Prototype/packetlib_mpi /RossiFumi/users/zoli/DL0Prototype/conf/proto1.xml /RossiFumi/users/zoli/DL0Prototype/conf/proto1.raw 100000 > logpacketlib

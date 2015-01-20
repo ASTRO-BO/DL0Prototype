@@ -1,3 +1,14 @@
 streamer
 receiver_protobuf
 receiver_packetlib
+packetlib_mpi
+protobuf_mpi
+conf/CTAHeaderGEN.header
+conf/rta_fadc_all.stream
+conf/triggered_telescope1_30GEN.packet
+conf/triggered_telescope1_40GEN.packet
+conf/triggered_telescope1_50GEN.packet
+conf/triggered_telescope_pixel1_30GEN.rblock
+conf/triggered_telescope_pixel1_40GEN.rblock
+conf/triggered_telescope_pixel1_50GEN.rblock
+conf/triggered_telescope_pixelIDGEN.rblock
